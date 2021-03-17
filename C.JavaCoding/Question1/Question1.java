@@ -7,14 +7,14 @@ public class Question1 {
         Map<String, Boolean> hasCommonEmployer = network.keySet().stream().collect(Collectors.toMap(k -> k, k -> Boolean.FALSE));
 
         network.forEach((people, friends)->{
-            if(!hasCommonEmployer.get(people)){
-                friends.forEach(friend->{
-                    if(employer.get(people).equals(employer.get(friend))){
-                        hasCommonEmployer.replace(people, Boolean.TRUE);
-                        hasCommonEmployer.replace(friend, Boolean.TRUE);
-                    }
-                });
-            }
+
+            friends.forEach(friend->{
+                if(employer.get(people).equals(employer.get(friend))){
+                    hasCommonEmployer.replace(people, Boolean.TRUE);
+                    hasCommonEmployer.replace(friend, Boolean.TRUE);
+                }
+            });
+
         });
 
         ArrayList<String> groupA = new ArrayList<>();
