@@ -1,21 +1,43 @@
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Question1 {
 
     private static ArrayList<String> findGroupA(HashMap<String, ArrayList<String>> network, HashMap<String, String> employer) {
-        Map<String, Boolean> hasCommonEmployer = network.keySet().stream().collect(Collectors.toMap(k -> k, k -> Boolean.FALSE));
+        Map<String, Boolean> visited = new HashMap<>();
+        Map<String, Boolean> hasCommonEmployer = new HashMap<>();
+        LinkedList<String> queue = new LinkedList<>();
+        AtomicBoolean isFirst = new AtomicBoolean(true);
 
-        network.forEach((people, friends)->{
+        network.keySet().forEach(k->{
+            if(isFirst.get()){
+                queue.add(k);
+                visited.put(k, Boolean.TRUE);
+                isFirst.set(false);
+            }
+            visited.put(k, Boolean.FALSE);
+            hasCommonEmployer.put(k, Boolean.FALSE);
+        });
 
-            friends.forEach(friend->{
-                if(employer.get(people).equals(employer.get(friend))){
-                    hasCommonEmployer.replace(people, Boolean.TRUE);
+
+        while (queue.size() != 0){
+            String employee = queue.poll();
+
+            network.get(employee).forEach(friend->{
+
+                if(employer.get(employee).equals(employer.get(friend))){
+                    hasCommonEmployer.replace(employee, Boolean.TRUE);
                     hasCommonEmployer.replace(friend, Boolean.TRUE);
                 }
-            });
 
-        });
+                if(!visited.get(friend)){
+                    visited.replace(friend, Boolean.TRUE);
+                    queue.add(friend);
+                }
+
+            });
+        }
 
         ArrayList<String> groupA = new ArrayList<>();
 
