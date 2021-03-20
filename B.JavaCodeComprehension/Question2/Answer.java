@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
 
 public class Answer {
     public static List<Integer> foo(int length) {
-        List<Integer> list = IntStream.rangeClosed(0, length).boxed().collect(Collectors.toList());
+        List<Integer> list = IntStream.rangeClosed(1, length).boxed().collect(Collectors.toList());
 
         Collections.shuffle(list);
 

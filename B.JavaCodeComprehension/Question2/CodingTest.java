@@ -8,7 +8,7 @@ public class CodingTest {
         boolean isDone = false;
         Random random = new Random();
         while (!isDone) {
-            int r = random.nextInt(10) + 1;
+            int r = random.nextInt(length) + 1;
             boolean isFound = false;
             for (int n : list)
                 if (n == r) {
@@ -22,6 +22,6 @@ public class CodingTest {
     }
 
     public static void main(String[] args) {
-        System.out.println(foo(10));
+        System.out.println(foo(15));
     }
 }
