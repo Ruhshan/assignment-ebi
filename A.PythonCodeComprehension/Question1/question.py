@@ -18,6 +18,6 @@ def foo(length):
     return list
 
 
-x = foo(15)
+x = foo(10)
 
-print sorted(x)
+print x
