@@ -8,7 +8,7 @@ git clone https://github.com/Ruhshan/assignment-ebi.git
 
 ## Navigate to Code directory
 ```bash
-cd A.PythonCodeComprehension
+cd assignment-ebi/A.PythonCodeComprehension
 ```
 
 ## Build docker image
