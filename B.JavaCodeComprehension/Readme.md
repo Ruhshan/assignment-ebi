@@ -16,12 +16,12 @@ cd assignment-ebi/B.JavaCodeComprehension
 docker build -f Dockerfile -t java-code-comprehension .
 ```
 
-## Run the answer code
+## Run the answer code for Question2
 ```bash
 docker run -it --rm java-code-comprehension java Answer   
 ```
 
-## Run the question code
+## Run the question code for Question2
 
 ```bash
 docker run -it --rm java-code-comprehension java CodingTest   
