@@ -20,3 +20,11 @@ cd assignment-ebi/A.PythonCodeComprehension
 ```bash
  docker run -it --rm python-code-comprehension python answer.py
 ```
+
+## Run the question script
+
+```bash
+ docker run -it --rm python-code-comprehension python question.py
+```
+
+If scripts are update building the image is necessary to reflect the changes.
