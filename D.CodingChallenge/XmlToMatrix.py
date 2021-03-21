@@ -1,4 +1,6 @@
 from prettytable import PrettyTable
+import xml.etree.ElementTree as ET
+
 
 class Matrix:
     index = {}
@@ -11,46 +13,42 @@ class Matrix:
         item_len = len(items)
         for item in items:
             self.index[item] = i
-            i+=1
-            self.rows.append([0]*item_len)
+            i += 1
+            self.rows.append([0] * item_len)
 
-    def cell_increment(self,row, col):
-        self.rows[self.index[row]][self.index[col]]+=1
-
+    def cell_increment(self, row, col):
+        self.rows[self.index[row]][self.index[col]] += 1
 
     def __str__(self):
         table = PrettyTable()
-        table.field_names = [""]+self.items
+        table.field_names = [""] + self.items
 
         for i in range(len(self.rows)):
-            table.add_row([self.items[i]]+self.rows[i])
+            table.add_row([self.items[i]] + self.rows[i])
         return table.get_string()
 
 
-
 class XmlToMatrix:
-    def __init__(self):
-        pass
+    authors_in_article = {}
+    articles_by_author = {}
 
-    def get_authors_in_article(self):
-        data = {
-            "Title 1" : ["Public, JQ", "Doe, John"],
-            "Title 2" : ["Doe, John", "Doe, Jane"],
-            "Title 3" : ["Doe, Jane", "Public, JQ"],
-            "Title 4" : ["Smith, John", "Doe, John"]
-        }
+    def __init__(self, xml_path):
+        tree = ET.parse(xml_path)
+        articles = tree.getroot()
+        for article in articles:
+            article_title = article[0].text
+            authors_list = article[1]
+            for author in authors_list:
+                author_name = "{}, {}".format(author[0].text, author[1].text)
+                try:
+                    self.authors_in_article[article_title].append(author_name)
+                except KeyError:
+                    self.authors_in_article[article_title] = [author_name]
 
-        return data
-
-    def get_articles_by_author(self):
-        data = {
-            "Public, JQ":["Title 1","Title 3"],
-            "Doe, John":["Title 1","Title 2","Title 4"],
-            "Doe, Jane":["Title 2","Title 3"],
-            "Smith, John":["Title 4"]
-        }
-
-        return data
+                try:
+                    self.articles_by_author[author_name].append(article_title)
+                except KeyError:
+                    self.articles_by_author[author_name] = [article_title]
 
     def create_co_author_matrix(self, authors):
         return Matrix(authors)
@@ -64,25 +62,17 @@ class XmlToMatrix:
         return co_authors
 
 
-
 if __name__ == "__main__":
-    xmlTomatrix = XmlToMatrix()
-    authors_in_article = xmlTomatrix.get_authors_in_article()
-    articles_by_author = xmlTomatrix.get_articles_by_author()
+    xmlToMatrix = XmlToMatrix("articles.xml")
+    authors_in_article = xmlToMatrix.authors_in_article
+    articles_by_author = xmlToMatrix.articles_by_author
 
     all_authors = list(articles_by_author.keys())
 
-    matrix = xmlTomatrix.create_co_author_matrix(all_authors)
+    matrix = xmlToMatrix.create_co_author_matrix(all_authors)
 
     for author in all_authors:
-        for co_author in xmlTomatrix.get_all_co_authors(author, authors_in_article, articles_by_author):
+        for co_author in xmlToMatrix.get_all_co_authors(author, authors_in_article, articles_by_author):
             matrix.cell_increment(author, co_author)
 
     print(matrix)
-
-
-
-
-
-
-
