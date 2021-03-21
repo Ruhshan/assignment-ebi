@@ -53,26 +53,25 @@ class XmlToMatrix:
     def create_co_author_matrix(self, authors):
         return Matrix(authors)
 
-    def get_all_co_authors(self, author, authors_in_article, articles_by_author):
+    def get_all_co_authors(self, author):
         co_authors = []
-        articles = articles_by_author[author]
+        articles = self.articles_by_author[author]
         for article in articles:
-            for co_author in authors_in_article[article]:
+            for co_author in self.authors_in_article[article]:
                 co_authors.append(co_author)
         return co_authors
+
+    def generate_matrix(self):
+        all_authors = list(self.articles_by_author.keys())
+        matrix = self.create_co_author_matrix(all_authors)
+
+        for author in all_authors:
+            for co_author in self.get_all_co_authors(author):
+                matrix.cell_increment(author, co_author)
+
+        return matrix
 
 
 if __name__ == "__main__":
     xmlToMatrix = XmlToMatrix("articles.xml")
-    authors_in_article = xmlToMatrix.authors_in_article
-    articles_by_author = xmlToMatrix.articles_by_author
-
-    all_authors = list(articles_by_author.keys())
-
-    matrix = xmlToMatrix.create_co_author_matrix(all_authors)
-
-    for author in all_authors:
-        for co_author in xmlToMatrix.get_all_co_authors(author, authors_in_article, articles_by_author):
-            matrix.cell_increment(author, co_author)
-
-    print(matrix)
+    print(xmlToMatrix.generate_matrix())
